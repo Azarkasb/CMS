@@ -1,4 +1,4 @@
-from base import BASE_DIR
+from CMS.settings.base import BASE_DIR
 
 DEBUG = True
 

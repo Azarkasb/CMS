@@ -7,6 +7,12 @@ make sure docker and docker compose has been correctly installed
 move to the project root directory (CMS) and run 
 > docker compose up
 
+then run
+> docker exec cms-web-1 python manage.py migrate
+
+*optional*  for having access to admin pages
+> docker exec -it cms-web-1 python manage.py createsuperuser
+
 ## APIs
 
 ### Auth

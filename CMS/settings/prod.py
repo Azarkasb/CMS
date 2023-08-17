@@ -9,7 +9,7 @@ DATABASES = {
         "NAME": "cms_db",
         "USER": "cms_user",
         "PASSWORD": "maybeimaybeu",
-        "HOST": "localhost",
+        "HOST": "db",
         "PORT": "5432",
     }
 }
