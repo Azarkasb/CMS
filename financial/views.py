@@ -33,8 +33,10 @@ class BalanceReportAPIView(APIView):
             end_date = request_serializer.validated_data['end_date']
 
             raw_report = request.user.wallet.generate_date_interval_report(start_date, end_date)
+            print(raw_report)
             result_serializer = BalanceReportResultSerializer(data=raw_report)
+            if result_serializer.is_valid():
+                return Response(result_serializer.data, status=status.HTTP_200_OK)
 
-            return Response(result_serializer.data, status=status.HTTP_200_OK)
-
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

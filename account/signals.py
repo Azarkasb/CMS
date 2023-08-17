@@ -7,6 +7,5 @@ from financial.models import Wallet
 
 @receiver(post_save, sender=User)
 def create_user_wallet(sender, instance, created, **kwargs):
-    print('something craette')
     if created:
         Wallet.objects.create(user=instance)

@@ -1,4 +1,5 @@
 from django.test import TestCase
+from financial.models import Transaction, Wallet
 
 
 class TestFinancial(TestCase):
@@ -27,3 +28,25 @@ class TestFinancial(TestCase):
             format="json",
             **auth_headers
         )
+
+        self.assertEqual(response.status_code, 201)
+
+    def test_retrieve_transaction(self):
+
+        auth_headers = self.login_header()
+        response = self.client.get(
+            "/financial/transactions/",
+            **auth_headers
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_generate_report(self):
+        auth_headers = self.login_header()
+        response = self.client.post(
+            "/financial/report/",
+            **auth_headers
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+

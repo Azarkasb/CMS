@@ -37,5 +37,5 @@ class BalanceReportResultSerializer(serializers.Serializer):
 
     def get_initial_balance(self, obj):
         # we supposed to calculate it again
-        total_cash_flow = obj['total_income'] - obj['total_expense']
-        return obj['current_balance'] - total_cash_flow
+        net_cash_flow = obj['total_income'] - obj['total_expense']
+        return obj['current_balance'] - net_cash_flow
