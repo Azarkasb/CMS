@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
     if request.method == 'POST':
         username = request.data.get('username')
