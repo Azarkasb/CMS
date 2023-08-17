@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from financial.serializers import BalanceReportRequestSerializer, BalanceReportResultSerializer
 
 
+# Using ViewSet for CRUD >>>>>>>>
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
 
@@ -13,15 +14,12 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(wallet__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        data = request.data
-        data._mutable = True
-        data['wallet'] = request.user.wallet.id
-        data._mutable = False
+        request.data['wallet'] = request.user.wallet.id
+        return super().create(request, *args, **kwargs)
 
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(f"created with id {serializer.data.get('id')}", status=status.HTTP_201_CREATED)
+    def update(self, request, *args, **kwargs):
+        request.data['wallet'] = request.user.wallet.id     # wallet_id cannot be updated
+        return super().update(request, *args, **kwargs)
 
 
 class BalanceReportAPIView(APIView):
@@ -33,7 +31,6 @@ class BalanceReportAPIView(APIView):
             end_date = request_serializer.validated_data['end_date']
 
             raw_report = request.user.wallet.generate_date_interval_report(start_date, end_date)
-            print(raw_report)
             result_serializer = BalanceReportResultSerializer(data=raw_report)
             if result_serializer.is_valid():
                 return Response(result_serializer.data, status=status.HTTP_200_OK)

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from financial.models import Transaction, Wallet
+import json
 
 
 class TestFinancial(TestCase):
@@ -7,14 +8,14 @@ class TestFinancial(TestCase):
         self.client.post(
             "/register/",
             data={"username": "user", "password": "pass"},
-            format="json",
+            content_type="application/json",
         )
 
     def login_header(self):
         login_response = self.client.post(
             "/api-token-auth/",
             data={"username": "user", "password": "pass"},
-            format="json",
+            content_type="application/json",
         )
 
         token = login_response.data.get("token")
@@ -24,8 +25,8 @@ class TestFinancial(TestCase):
         auth_headers = self.login_header()
         response = self.client.post(
             "/financial/transactions/",
-            data={"amount": 10000, "type": "I"},
-            format="json",
+            data=json.dumps({"amount": 10000, "type": "I"}),
+            content_type="application/json",
             **auth_headers
         )
 
