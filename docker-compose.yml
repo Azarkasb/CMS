@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    image: cms
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["gunicorn", "your_project_name.wsgi:application", "--bind", "0.0.0.0:8000"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - CMS=prod
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=cms_db
+      - POSTGRES_USER=cms_user
+      - POSTGRES_PASSWORD=maybeimaybeu
+
+volumes:
+  postgres_data:

@@ -1,6 +1,12 @@
 # CMS
 Cash Management System
 
+## Deploy
+### Production
+make sure docker and docker compose has been correctly installed
+move to the project root directory (CMS) and run 
+> docker compose up
+
 ## APIs
 
 ### Auth
