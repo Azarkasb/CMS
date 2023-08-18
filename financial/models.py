@@ -8,7 +8,7 @@ class Wallet(models.Model):
     balance = models.BigIntegerField(default=0)
 
     def generate_date_interval_report(self, start_date: dt.date, end_date: dt.date):
-        transactions = self.transaction_set.filter(wallet=self, date__range=[start_date, end_date])
+        transactions = self.transaction_set.filter(date__range=[start_date, end_date])
         report = dict()
         report.update(transactions.filter(type="I").aggregate(total_income=models.Sum('amount')))
         if report.get("total_income") is None:
@@ -45,7 +45,7 @@ class Transaction(models.Model):
         default=TransactionCategory.MISC,
         choices=TransactionCategory.choices
     )
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=dt.date.today)
 
     def apply_balance_effect(self, reverse=False):
         value = self.amount if self.type == "I" else -1 * self.amount
@@ -53,6 +53,7 @@ class Transaction(models.Model):
             value *= -1
 
         self.wallet.balance += value
+        self.wallet.save()
 
     def save(self, *args, **kwargs):
         if self.pk:  # update time
@@ -60,3 +61,7 @@ class Transaction(models.Model):
             previous_transaction.apply_balance_effect(reverse=True)
         self.apply_balance_effect()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.apply_balance_effect(reverse=True)
+        super().delete(*args, **kwargs)
