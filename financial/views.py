@@ -13,7 +13,7 @@ from django.http import QueryDict
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['amount', 'category', 'type', 'date']
+    filterset_fields = ['category', 'type', 'date']
     ordering_fields = ['amount', 'category', 'type', 'date']
 
     def get_queryset(self):

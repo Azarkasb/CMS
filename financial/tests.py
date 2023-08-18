@@ -131,7 +131,6 @@ class TestFinancial(TestCase):
             "/financial/transactions/1/",
             **auth_headers
         )
-
         self.assertEqual(response.status_code, 200)
 
     def test_update_transaction(self):
